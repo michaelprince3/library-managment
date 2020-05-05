@@ -1,10 +1,12 @@
 import sqlite3
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from libraryapp.models import Book
 from libraryapp.models import model_factory
 from ..connection import Connection
 
 
+@login_required
 def book_list(request):
     if request.method == 'GET':
         with sqlite3.connect(Connection.db_path) as conn:
@@ -36,7 +38,7 @@ def book_list(request):
             #     book.librarian_id = row['publisher']
             #     book.location_id = row['library_id']
 
-                # all_books.append(book)
+            # all_books.append(book)
 
         template = 'books/list.html'
         context = {
