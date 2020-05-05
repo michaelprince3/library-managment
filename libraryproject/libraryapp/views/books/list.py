@@ -1,5 +1,7 @@
 import sqlite3
 from django.shortcuts import render
+from django.urls import reverse
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from libraryapp.models import Book
 from libraryapp.models import model_factory
@@ -28,21 +30,29 @@ def book_list(request):
 
             all_books = db_cursor.fetchall()
 
-            # for row in dataset:
-            #     book = Book()
-            #     book.id = row['id']
-            #     book.title = row['title']
-            #     book.isbn = row['isbn']
-            #     book.author = row['author']
-            #     book.year_published = row['yearPublished']
-            #     book.librarian_id = row['publisher']
-            #     book.location_id = row['library_id']
-
-            # all_books.append(book)
-
         template = 'books/list.html'
         context = {
             'all_books': all_books
         }
 
         return render(request, template, context)
+
+    elif request.method == 'POST':
+        form_data = request.POST
+
+        with sqlite3.connect(Connection.db_path) as conn:
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            INSERT INTO libraryapp_book
+            (
+                title, author, isbn,
+                yearPublished, library_id, publisher
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (form_data['title'], form_data['author'],
+                form_data['isbn'], form_data['yearPublished'],
+                request.user.librarian.id, form_data["location"]))
+
+        return redirect(reverse('libraryapp:books'))
