@@ -8,6 +8,9 @@
   <body>
     <h1>{{ librarian.first_name }}</h1>
     <h2> {{ librarian.last_name }}</h2>
-
+    {% comment %} <form action="{% url 'libraryapp:librarian' librarian.id %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="actual_method" value="DELETE">
+    <button>Delete</button> {% endcomment %}
   </body>
 </html>
