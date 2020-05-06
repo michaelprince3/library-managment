@@ -28,17 +28,6 @@ def librarian_list(request):
 
         all_librarians = db_cursor.fetchall()
 
-        # for row in dataset:
-        # lib = Librarian()
-        # lib.id = row["id"]
-        # lib.location_id = row["location_id"]
-        # lib.user_id = row["user_id"]
-        # lib.first_name = row["first_name"]
-        # lib.last_name = row["last_name"]
-        # lib.email = row["email"]
-
-        # all_librarians.append(lib)
-
     template_name = 'librarians/list.html'
 
     context = {
